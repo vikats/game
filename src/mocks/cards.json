@@ -1,0 +1,210 @@
+[
+  {
+    "name": "2s",
+    "power": 1
+  },
+  {
+    "name": "3s",
+    "power": 2
+  },
+  {
+    "name": "4s",
+    "power": 3
+  },
+  {
+    "name": "5s",
+    "power": 4
+  },
+  {
+    "name": "6s",
+    "power": 5
+  },
+  {
+    "name": "7s",
+    "power": 6
+  },
+  {
+    "name": "8s",
+    "power": 7
+  },
+  {
+    "name": "9s",
+    "power": 8
+  },
+  {
+    "name": "10s",
+    "power": 9
+  },
+  {
+    "name": "Js",
+    "power": 10
+  },
+  {
+    "name": "Qs",
+    "power": 11
+  },
+  {
+    "name": "Ks",
+    "power": 12
+  },
+  {
+    "name": "As",
+    "power": 13
+  },
+  {
+    "name": "2d",
+    "power": 1
+  },
+  {
+    "name": "3d",
+    "power": 2
+  },
+  {
+    "name": "4d",
+    "power": 3
+  },
+  {
+    "name": "5d",
+    "power": 4
+  },
+  {
+    "name": "6d",
+    "power": 5
+  },
+  {
+    "name": "7d",
+    "power": 6
+  },
+  {
+    "name": "8d",
+    "power": 7
+  },
+  {
+    "name": "9d",
+    "power": 8
+  },
+  {
+    "name": "10d",
+    "power": 9
+  },
+  {
+    "name": "Jd",
+    "power": 10
+  },
+  {
+    "name": "Qd",
+    "power": 11
+  },
+  {
+    "name": "Kd",
+    "power": 12
+  },
+  {
+    "name": "Ad",
+    "power": 13
+  },
+  {
+    "name": "2c",
+    "power": 1
+  },
+  {
+    "name": "3c",
+    "power": 2
+  },
+  {
+    "name": "4c",
+    "power": 3
+  },
+  {
+    "name": "5c",
+    "power": 4
+  },
+  {
+    "name": "6c",
+    "power": 5
+  },
+  {
+    "name": "7c",
+    "power": 6
+  },
+  {
+    "name": "8c",
+    "power": 7
+  },
+  {
+    "name": "9c",
+    "power": 8
+  },
+  {
+    "name": "10c",
+    "power": 9
+  },
+  {
+    "name": "Jc",
+    "power": 10
+  },
+  {
+    "name": "Qc",
+    "power": 11
+  },
+  {
+    "name": "Kc",
+    "power": 12
+  },
+  {
+    "name": "Ac",
+    "power": 13
+  },
+  {
+    "name": "2h",
+    "power": 1
+  },
+  {
+    "name": "3h",
+    "power": 2
+  },
+  {
+    "name": "4h",
+    "power": 3
+  },
+  {
+    "name": "5h",
+    "power": 4
+  },
+  {
+    "name": "6h",
+    "power": 5
+  },
+  {
+    "name": "7h",
+    "power": 6
+  },
+  {
+    "name": "8h",
+    "power": 7
+  },
+  {
+    "name": "9h",
+    "power": 8
+  },
+  {
+    "name": "10h",
+    "power": 9
+  },
+  {
+    "name": "Jh",
+    "power": 10
+  },
+  {
+    "name": "Qh",
+    "power": 11
+  },
+  {
+    "name": "Kh",
+    "power": 12
+  },
+  {
+    "name": "Ah",
+    "power": 13
+  }
+]
