@@ -17,7 +17,10 @@
     npm start
     ```
 If you want to start app via docker
-
+1. Build docker
+   ```
+   docker-compose build
+   ```
 1. Containers or databases
     ```
     docker-compose up db_game db_wallet
