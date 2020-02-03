@@ -1,26 +1,18 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
-const signOptions: SignOptions = {
-  algorithm: 'HS256',
-  issuer: 'card-predictor',
-  expiresIn: 60000000,
-};
-const key = 'dtglebplfpvqzfpwgpgywckwvuwylg';
-
-type jwtClientTokenType = {
-  playerId: string
-}
-
-function writeToken(userData: jwtClientTokenType) {
-  return jwt.sign(userData, key, signOptions);
+function writeToken(playerId: number) {
+  const { signOptions, key } = config.get('jwt');
+  return jwt.sign({ playerId }, key, signOptions);
 }
 
 function readToken(token: string) {
+  const { key } = config.get('jwt');
+
   return jwt.verify(token, key);
 }
 
 export {
   writeToken,
   readToken,
-  jwtClientTokenType
 }

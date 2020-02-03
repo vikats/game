@@ -1,11 +1,11 @@
+import { Application } from 'express';
 import { DataTypes } from 'sequelize';
 
 import { PlayerGames } from '../repositories';
-import { GameStatus } from '../constants';
+import { GAME_STATUS } from '../constants';
+const { INITIATED } = GAME_STATUS;
 
-const { INITIATED } = GameStatus;
-
-export default (app: any) => {
+export default (app: Application) => {
   const sequelize = app.get('dbConnection');
 
   PlayerGames.init({
@@ -15,11 +15,11 @@ export default (app: any) => {
       autoIncrement: true,
     },
     status: {
-      type: DataTypes.ENUM(...Object.values(GameStatus)),
+      type: DataTypes.ENUM(...Object.values(GAME_STATUS)),
       allowNull: false,
       defaultValue: INITIATED,
       validate: {
-        isIn: [Object.values(GameStatus)],
+        isIn: [Object.values(GAME_STATUS)],
       },
     },
     playerId: {

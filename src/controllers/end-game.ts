@@ -1,11 +1,17 @@
 import { Request, Response } from 'express';
+import { BAD_REQUEST }from 'http-status-codes';
 
 import app from '../app';
+import { MESSAGES, GAME_STATUS } from '../constants';
 
-import { processBalance } from '../modules/microservice-link';
+import { processBalance } from '../modules';
 import {
-  BAD_REQUEST_CODE,
-} from '../constants/api';
+  generateRandomCardFromDeck,
+  isSuccessPrediction
+} from '../utils/cards';
+
+const { FAILED, FINISHED } = GAME_STATUS;
+const { YOU_LOST, YOU_WIN } = MESSAGES;
 
 async function endGame(req: Request, res: Response) {
   const { models } = app.get('dbConnection');
@@ -13,18 +19,32 @@ async function endGame(req: Request, res: Response) {
   const { playerId } = res.locals;
 
   if (!prediction) {
-    return res.sendStatus(BAD_REQUEST_CODE);
+    return res.sendStatus(BAD_REQUEST);
   }
 
-  const game = await models.playerGames.getInitiatedGames(playerId);
+  const game = await models.playerGames.getInitiatedGame(playerId);
   if (!game) {
-    return res.status(BAD_REQUEST_CODE);
+    return res.sendStatus(BAD_REQUEST);
   }
-  const { betAmount } = game;
+  const { id, betAmount, firstCard } = game;
 
-  processBalance('withdraw', betAmount, playerId)
-    .then()
-    .catch(() => res.sendStatus(BAD_REQUEST_CODE)); // need to add void game
+  try {
+    await processBalance('withdraw', betAmount, playerId);
+    const { name: secondCard } = generateRandomCardFromDeck();
+    const isWin = isSuccessPrediction(firstCard, secondCard, prediction);
+
+    await models.playerGames.updateGameById(id, { secondCard, prediction, status: FINISHED });
+    if (!isWin) {
+      return res.send({ message: YOU_LOST });
+    }
+    await processBalance('deposit', betAmount * 2, playerId);
+
+    return res.send({ message: YOU_WIN });
+  } catch (e) {
+    await models.playerGames.updateGameById(id, { status: FAILED });
+
+    return res.sendStatus(BAD_REQUEST);
+  }
 }
 
 export {

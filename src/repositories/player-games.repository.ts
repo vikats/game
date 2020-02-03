@@ -1,14 +1,13 @@
 import { Model } from 'sequelize';
 
-import { GameStatus } from '../constants';
-
-const { INITIATED } = GameStatus;
+import { GAME_STATUS } from '../constants';
+const { INITIATED } = GAME_STATUS;
 
 export class PlayerGames extends Model {
   public static readonly primaryKeyAttribute = 'id';
 
   public id!: number;
-  public status!: GameStatus;
+  public status!: GAME_STATUS;
   public playerId!: number;
   public firstCard!: string;
   public secondCard!: string;
@@ -22,14 +21,18 @@ export class PlayerGames extends Model {
     PlayerGames.belongsTo(models.games, { targetKey: 'id' });
   }
 
-  public static getInitiatedGames(playerId: number) {
+  public static getInitiatedGame(playerId: number) {
     return this.findOne({
       raw: true,
-      attributes: ['status', 'firstCard', 'betAmount', 'secondCard'],
+      attributes: ['id', 'status', 'firstCard', 'betAmount', 'secondCard'],
       where: {
         playerId,
         status: INITIATED,
       }
     })
+  }
+
+  public static updateGameById(id: string, dataToUpdate: object) {
+    return this.update(dataToUpdate, { where: { id } });
   }
 }

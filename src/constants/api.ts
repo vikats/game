@@ -1,11 +1,11 @@
-const BAD_REQUEST_CODE = 400;
-const NOT_AUTHORIZED_CODE = 401;
-const STATUS_OK_CODE = 200;
-const PLAYER_ALREADY_INITIATED_GAME = 'player-have-initiated-game';
+const PORT = process.env.PORT || 3000;
+const API_PREFIX = '';
+const WALLET_LINK = process.env.WALLET_LINK || 'http://127.0.0.1:3001/';
+const MICROSERVICE_NAME = 'game-service';
 
 export {
-  BAD_REQUEST_CODE,
-  NOT_AUTHORIZED_CODE,
-  STATUS_OK_CODE,
-  PLAYER_ALREADY_INITIATED_GAME
+  PORT,
+  API_PREFIX,
+  WALLET_LINK,
+  MICROSERVICE_NAME,
 }

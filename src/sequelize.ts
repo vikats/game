@@ -1,10 +1,13 @@
+import { Application } from 'express';
 import { Sequelize, Options } from 'sequelize';
+import config from 'config';
 
-export default function(app: any): void {
+const { DB_URI } = process.env;
+
+export default function(app: Application): void {
+  const { uri } = config.get('database');
+
   const sequelizeOptions: Options = {
-    host: '127.0.0.1',
-    dialect: 'mysql',
-    port: 3353,
     logging: false,
     define: {
       freezeTableName: true,
@@ -17,7 +20,7 @@ export default function(app: any): void {
     },
   };
 
-  const sequelize: Sequelize = new Sequelize('game', 'root', 'pass', sequelizeOptions);
+  const sequelize: Sequelize = new Sequelize(DB_URI || uri, sequelizeOptions);
 
   app.set('dbConnection', sequelize);
 

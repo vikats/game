@@ -1,0 +1,16 @@
+{
+  "database": {
+    "uri": "mysql://root:pass@localhost:3353/game"
+  },
+  "crypto": {
+    "secret": "uxrywmqxyigfcjndtgmbbsnzlkegjuso"
+  },
+  "jwt": {
+    "signOptions": {
+      "algorithm": "HS256",
+      "issuer": "card-predictor",
+      "expiresIn": 60000000
+    },
+    "key": "dtglebplfpvqzfpwgpgywckwvuwylg"
+  }
+}

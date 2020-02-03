@@ -1,20 +1,17 @@
 import { Request, Response } from 'express';
-import { readToken, jwtClientTokenType } from '../utils/jwt';
-import { NOT_AUTHORIZED_CODE } from '../constants/api';
+import { UNAUTHORIZED } from 'http-status-codes';
 
-function isAuth(req: Request, res: Response, next: any) {
+import { readToken } from '../utils/jwt';
+
+export function isAuth(req: Request, res: Response, next: any) {
   const { authorizedToken } = req.cookies;
 
   try {
-    const userData = readToken(authorizedToken) as jwtClientTokenType;
+    const userData: any = readToken(authorizedToken);
     res.locals.playerId = userData.playerId;
   } catch (e) {
-    return res.sendStatus(NOT_AUTHORIZED_CODE);
+    return res.sendStatus(UNAUTHORIZED);
   }
 
   return next();
-}
-
-export {
-  isAuth,
 }

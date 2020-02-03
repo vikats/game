@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  db_game:
+    image: mysql:5.7
+    ports:
+      - "3308:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: game
+  game:
+    build: ./
+    depends_on:
+      - db_game
+    environment:
+      WALLET_LINK: http://wallet:3001/
+      DB_URI: mysql://app_user:secret@db_game:3306/game
+      PORT: 3000
+    ports:
+      - "3000:3000"
+  db_wallet:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: wallet
+  wallet:
+    build: ../wallet
+    depends_on:
+      - db_game
+    environment:
+      DB_URI: mysql://app_user:secret@db_wallet:3306/wallet
+      PORT: 3001
+    ports:
+      - "3001:3001"
+volumes:
+  db_data: {}

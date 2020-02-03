@@ -1,82 +1,45 @@
 import request from 'request';
-import crypto from 'crypto';
-import { STATUS_OK_CODE } from '../constants/api';
+import { MULTIPLE_CHOICES } from 'http-status-codes';
 
-const cryptoValue =  {
-  alg: 'aes-256-cbc',
-  key: 'uxrywmqxyigfcjndtgmbbsnzlkegjuso', // 32 length
-  salt: 'kzqwootmgxudutze' // 16 length
-};
-
-const microserviceName = 'game-service';
-
-function createAuthToken() {
-  const { alg, key, salt } = cryptoValue;
-  const cipher = crypto.createCipheriv(alg, Buffer.from(key), Buffer.from(salt));
-
-  const text = JSON.stringify({
-    createdAt: Date.now(),
-    microserviceName,
-  });
-
-  return cipher.update(text, 'utf8', 'hex').concat(cipher.final('hex'));
-}
+import { createHash } from '../utils/hash-string';
+import {
+  MICROSERVICE_NAME,
+  WALLET_LINK,
+} from '../constants';
 
 function verifyOneTimeToken(oneTimeToken: string) {
   const target = 'tokens/verify';
 
-  const options = {
-    headers: {
-      microserviceHash: createAuthToken(),
-    },
-    body: {
-      oneTimeToken,
-    },
-    json: true,
-    url: `http://127.0.0.1:3001/${ target }`,
-  };
-
-  return new Promise((resolve, reject) => {
-    request.post(options, (err, res) => {
-      if (err) {
-        return reject(err);
-      }
-
-      if (res && res.statusCode !== STATUS_OK_CODE) {
-        return reject(res);
-      }
-
-      return resolve(res)
-    })
-  });
+  return sendToMicroservice({ oneTimeToken }, target);
 }
 
 function processBalance(processType: string, betAmount: number, playerId: number) {
   const target = `wallets/${ processType }`;
 
+  return sendToMicroservice({ betAmount, playerId }, target);
+}
+
+function sendToMicroservice(body: object, target: string) {
   const options = {
     headers: {
-      microserviceHash: createAuthToken(),
+      'microservice-hash': createHash({ microserviceName: MICROSERVICE_NAME, body }),
     },
-    body: {
-      betAmount,
-      playerId,
-    },
+    body,
     json: true,
-    url: `http://127.0.0.1:3001/${ target }`,
+    url: `${ WALLET_LINK }${ target }`,
   };
-
+  console.log(options);
   return new Promise((resolve, reject) => {
-    request.post(options, (err, res) => {
+    request.post(options, (err, res, body) => {
       if (err) {
         return reject(err);
       }
 
-      if (res && res.statusCode !== STATUS_OK_CODE) {
+      if (res && res.statusCode > MULTIPLE_CHOICES) {
         return reject(res);
       }
 
-      return resolve(res)
+      return resolve(body)
     })
   });
 }

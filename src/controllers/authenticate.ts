@@ -1,33 +1,27 @@
 import { Request, Response } from 'express';
+import { BAD_REQUEST } from 'http-status-codes';
 
 import app from '../app';
-
-import { verifyOneTimeToken } from '../modules/microservice-link';
 import { writeToken } from '../utils/jwt';
-import { BAD_REQUEST_CODE, PLAYER_ALREADY_INITIATED_GAME } from '../constants/api';
 
-function authenticate(req: Request, res: Response) {
+async function authenticate(req: Request, res: Response) {
+  const { playerId } = req.body;
+
+  try {
+    res.cookie('authorizedToken', writeToken(playerId));
+
+    return res.send(await prepareUserUnfinishedGame(playerId));
+  } catch (e) {
+    return res.sendStatus(BAD_REQUEST);
+  }
+}
+
+async function prepareUserUnfinishedGame(playerId: number) {
   const { models } = app.get('dbConnection');
 
-  const { oneTimeToken } = req.body;
-  if (!oneTimeToken) {
-    return res.sendStatus(BAD_REQUEST_CODE);
-  }
+  const game = await models.playerGames.getInitiatedGame(playerId) || {};
 
-  verifyOneTimeToken(oneTimeToken)
-    .then(async ({ body }: any) => {
-      const { playerId } = body;
-
-      const game = await models.playerGames.getInitiatedGames(playerId);
-      if (game) {
-        return res.status(BAD_REQUEST_CODE)
-          .send({ message: PLAYER_ALREADY_INITIATED_GAME, ...body, ...game });
-      }
-      res.cookie('authorizedToken', writeToken(body));
-
-      return res.send(body);
-    })
-    .catch(() => res.sendStatus(BAD_REQUEST_CODE));
+  return { game, playerId }
 }
 
 export {
